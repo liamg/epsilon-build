@@ -1,0 +1,52 @@
+language: go
+env:
+  global:
+    - THING
+before_install:
+  - git clone https://${TOKEN}@github.com/liamg/epsilon.git
+  - cd epsilon
+jobs:
+  include:
+    - stage: test
+      name: "Run Go tests"
+      before_install:
+        - sudo apt-get update
+      install:
+        - sudo apt install -y gcc libc6-dev libglu1-mesa-dev libgl1-mesa-dev libxrandr-dev libxcursor-dev libxinerama-dev libxi-dev libasound2-dev xorg-dev gcc-multilib gcc-mingw-w64-x86-64 xvfb
+      script: env GO111MODULE=on xvfb-run --server-args="-screen 0 1024x768x24" make test
+    - stage: build
+      name: "Build MacOS"
+      os: osx
+      go: master
+      script: make build
+      deploy:
+        - provider: releases
+          skip_cleanup: true
+          api_key:
+            secure: "Ml9l/F2haSmX7J5ZCYvjKG1b4tWjBUoy/jx/EWeLXC3hTBdOr1svD7kG7ZW2mgelGUb8QUNwIvon/8T8GMWD4wbZzrqI+1vtl6q80z70he5rEYZiT3ZhX5YUC2lMZa3dfB3rXZhfuoOe8DoqF4EJoy9DxpMDwLNoYRXveOrn+ujgsbDd89/X1pLK4OND9AkUaIiyxEyG9L4LoJdyo9C7fyIsI9n6dm0Ex6dobIp01Lt6D/2K1tkoW6jbJyWEt9w07G9nRvQVWxgjOVrQHh+sJQL50Fe/3CvEwswjHIWOQlkKNkCUVbrN5ZxkugzYtKVHue1sxzMw28DRnd3gJf81IM89ln53jb0Ab04MRf/X6uIxVF5aCbInyQAAcRxT/vEhufOiMVpeK7KJeQ1/SFkt/BUOJ3Oo6QpHz9g7xRi7wbBIFG5x1ndK3MA5s+kVsfHCvFJnsHxUqvox7a4Kl8tQ1td0+F4GhYZLwmYehXLp1NCPd0mEwOt/FjUsHPvha9gU7tP4IGpEGsulCSym30PwcvpkoBD+GJDJqlo91N3oeWT2JJ5SSrLX/Dkel6ZLbH2yK6twi9aTyCO/WcYTVFea2THlrzRTl+/6KdoLqxSS7CT3M3vr9meehP+2SpPQ/N4be9X7v69leLcleqm1l/J9/TCsCdfv70cPqdyUU4pdBw0="
+          name: "epsilon $TRAVIS_TAG"
+          file:
+            - build/darwin-amd64-epsilon
+          on:
+            tags: true
+    - stage: build
+      name: "Build Linux/Windows"
+      os: linux
+      dist: xenial
+      go: master
+      before_install:
+        - sudo apt-get update
+      install:
+        - sudo apt install -y gcc libc6-dev libglu1-mesa-dev libgl1-mesa-dev libxrandr-dev libxcursor-dev libxinerama-dev libxi-dev libasound2-dev
+      script: make build
+      deploy:
+        - provider: releases
+          skip_cleanup: true
+          api_key:
+            secure: "Ml9l/F2haSmX7J5ZCYvjKG1b4tWjBUoy/jx/EWeLXC3hTBdOr1svD7kG7ZW2mgelGUb8QUNwIvon/8T8GMWD4wbZzrqI+1vtl6q80z70he5rEYZiT3ZhX5YUC2lMZa3dfB3rXZhfuoOe8DoqF4EJoy9DxpMDwLNoYRXveOrn+ujgsbDd89/X1pLK4OND9AkUaIiyxEyG9L4LoJdyo9C7fyIsI9n6dm0Ex6dobIp01Lt6D/2K1tkoW6jbJyWEt9w07G9nRvQVWxgjOVrQHh+sJQL50Fe/3CvEwswjHIWOQlkKNkCUVbrN5ZxkugzYtKVHue1sxzMw28DRnd3gJf81IM89ln53jb0Ab04MRf/X6uIxVF5aCbInyQAAcRxT/vEhufOiMVpeK7KJeQ1/SFkt/BUOJ3Oo6QpHz9g7xRi7wbBIFG5x1ndK3MA5s+kVsfHCvFJnsHxUqvox7a4Kl8tQ1td0+F4GhYZLwmYehXLp1NCPd0mEwOt/FjUsHPvha9gU7tP4IGpEGsulCSym30PwcvpkoBD+GJDJqlo91N3oeWT2JJ5SSrLX/Dkel6ZLbH2yK6twi9aTyCO/WcYTVFea2THlrzRTl+/6KdoLqxSS7CT3M3vr9meehP+2SpPQ/N4be9X7v69leLcleqm1l/J9/TCsCdfv70cPqdyUU4pdBw0="
+          name: "epsilon $TRAVIS_TAG"
+          file:
+            - build/linux-amd64-epsilon
+            - build/windows-amd64-epsilon.exe
+          on:
+            tags: true
