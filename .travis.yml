@@ -4,12 +4,12 @@ env:
     - secure: "WCVv6rE2Fogtv5j32+Jqo5agA78a8A2rlWH/u2AW+Voo5pitdndPvGE31DvSDjp8HCqrCfsE2qr/hnmuA1yRONWYMcsyPe9kiIi8fFJt7ciuonWlWGtuopQNgOHDZAXIPdE3GnllznpiO43Qz34BtLq0iZ/FMj8fzj1jfdeKcKRnLl04r4bkaanmALuymWS1FluKRQ1BpzpWmZtYGp/8+u9YVti0hD/hZhDprfnMmAYjlUwUcO5d1FVjGO7cElZO+IYTKUiIp4xpOnKj3sKCMkXoHsQtnpb4NhCNaBRbgKtwI75t8ffZwJB56f3GeqBESQjKH0RTX8MTMM1UxoM34xM6n+SDhVrG0NzKYwmwke0qhR33YxH4B5HT64QRHhmnlVYbLuRPJ/PXqMUwg865nHmoXkMGfy+7HkstP2SV6KEunDdr0UOMXhprcju/DizalgRH1PetRs35dNqmoxeY3HDRtfKI0JR11gsNYY5043iSWINqMHYxAJoYq6ZlYV1lCc6LZ6Y78lBnDw6F4ht0p/3MhkSKvFeaIGtKVuigNZJnKvszni2hQmd5iozXdXg1KX9Ve3iBKf5Y4MjeuVnjKWY3pUOAjbOm0cPDrS7Tf3sTCWFPyKmjclrHXUQKy1ZaM6oyBAHLO/+YaIktgQGexnp86lytvew/2T8GzTNhbzk="
 before_install:
   - git clone https://${TOKEN}@github.com/liamg/epsilon.git
-  - sudo apt-get update
 jobs:
   include:
     - stage: test
       name: "Run Go tests"
       install:
+        - sudo apt-get update
         - sudo apt install -y gcc libc6-dev libglu1-mesa-dev libgl1-mesa-dev libxrandr-dev libxcursor-dev libxinerama-dev libxi-dev libasound2-dev xorg-dev gcc-multilib gcc-mingw-w64-x86-64 xvfb
       script: cd epsilon && env GO111MODULE=on xvfb-run --server-args="-screen 0 1024x768x24" make test
     - stage: build
@@ -24,7 +24,7 @@ jobs:
             secure: "mzsy+fr87Ttnzw6/j59N+HClIGQAIVMsvC5gMwpkjiBglNj7tezwngZTdDlkbAYkK7xn5QMLz0RO0g40QvlWl/ato953yhAZm1YMKVWKZWudsHgLZwm4BWgnxa9t6VUqqUjemJ6Er3vadfdTUMu4nGWGDHjfm049QBYGrhXPNG70ufFfRylgOVR+JbNyvHNMXaBmsIm4BEpV7p54F1GZ4cBJyYnHLhswO4X/B7077GpYSskwVJy/mHPUHRctwc9y1RG71aEchhrGHu7T1XoUs7PtSEodJ2LCynZ9WTMwJ4PRr5itjnw79b/9fDSltzELaM9mYZMMJ/tTV0P/ZtyRYkNag4uiSjaHrpZx+Y51NeY+khMNGpipN4gs2dWb3jUjW+wGJKyZzT9d5tv7XMabqxQd6m485opcUCEU6z09I/igDKQW7yZHiRpYfuhbo0Hi3UKGGy8FTgZ1af9crud3aoa4LOBU36/1/2eluGFP3gx6qJYwhQvhmpu2eKzMUjgeG8NGK5zNHB+70yTMw+vI8BRQtYQvPsVL/1SDN+9CFkF+sTkmQJL6SQUT042Bk+adrMIslVvMY49ulwSxP9w5jDWebl1HMAAycdcpuC2RfVeKy5n9pWefUhZtjJoAjFo4C1OkUzJi9vngQn6W1EUb/78ANvUjV+n4WpVsDHH+xkA="
           name: "epsilon $TRAVIS_TAG"
           file:
-            - build/darwin-amd64-epsilon
+            - epsilon/build/darwin-amd64-epsilon
           on:
             tags: true
     - stage: build
@@ -33,6 +33,7 @@ jobs:
       dist: xenial
       go: master
       install:
+        - sudo apt-get update
         - sudo apt install -y gcc libc6-dev libglu1-mesa-dev libgl1-mesa-dev libxrandr-dev libxcursor-dev libxinerama-dev libxi-dev libasound2-dev
       script: cd epsilon && make build
       deploy:
