@@ -3,7 +3,7 @@ env:
   global:
     - secure: "WCVv6rE2Fogtv5j32+Jqo5agA78a8A2rlWH/u2AW+Voo5pitdndPvGE31DvSDjp8HCqrCfsE2qr/hnmuA1yRONWYMcsyPe9kiIi8fFJt7ciuonWlWGtuopQNgOHDZAXIPdE3GnllznpiO43Qz34BtLq0iZ/FMj8fzj1jfdeKcKRnLl04r4bkaanmALuymWS1FluKRQ1BpzpWmZtYGp/8+u9YVti0hD/hZhDprfnMmAYjlUwUcO5d1FVjGO7cElZO+IYTKUiIp4xpOnKj3sKCMkXoHsQtnpb4NhCNaBRbgKtwI75t8ffZwJB56f3GeqBESQjKH0RTX8MTMM1UxoM34xM6n+SDhVrG0NzKYwmwke0qhR33YxH4B5HT64QRHhmnlVYbLuRPJ/PXqMUwg865nHmoXkMGfy+7HkstP2SV6KEunDdr0UOMXhprcju/DizalgRH1PetRs35dNqmoxeY3HDRtfKI0JR11gsNYY5043iSWINqMHYxAJoYq6ZlYV1lCc6LZ6Y78lBnDw6F4ht0p/3MhkSKvFeaIGtKVuigNZJnKvszni2hQmd5iozXdXg1KX9Ve3iBKf5Y4MjeuVnjKWY3pUOAjbOm0cPDrS7Tf3sTCWFPyKmjclrHXUQKy1ZaM6oyBAHLO/+YaIktgQGexnp86lytvew/2T8GzTNhbzk="
 before_install:
-  - git clone https://${TOKEN}@github.com/liamg/epsilon.git
+  - cd .; git clone https://${TOKEN}@github.com/liamg/epsilon.git
 jobs:
   include:
     - stage: test
