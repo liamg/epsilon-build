@@ -16,6 +16,7 @@ jobs:
       name: "Build MacOS"
       os: osx
       go: master
+      install: true
       script: cd epsilon && make build
       deploy:
         - provider: releases
@@ -35,7 +36,7 @@ jobs:
       install:
         - sudo apt-get update
         - sudo apt install -y gcc libc6-dev libglu1-mesa-dev libgl1-mesa-dev libxrandr-dev libxcursor-dev libxinerama-dev libxi-dev libasound2-dev
-      script: cd epsilon && make build
+      script: cd epsilon && rm -rf vendor && make build
       deploy:
         - provider: releases
           skip_cleanup: true
